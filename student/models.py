@@ -39,3 +39,27 @@ class Student(CustomUser):
     class Meta:
         verbose_name_plural = ['Students']
         ordering = ['date_joined']
+
+    def get_all_payments(self):
+        pass
+
+
+class Booking(models.Model):
+    class Meta:
+        ordering = ['-booked_at']
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    BOOKING_STATUS_CHOICES = (
+        (0, "TTJ ga joylashtirish so'rovi rad etildi"),
+        (1, "Ko'rib chiqilmoqda"),
+        (2, "TTJ ga qabul qilindi"),
+    )
+    status = models.IntegerField()
+    description = models.TextField()
+    booked_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def display_status_data(self):
+        return self.BOOKING_STATUS_CHOICES[self.status][1]    
+
+    def __str__(self):
+        return f"{self.student.get_full_name()} | {self.display_status_data()}"
