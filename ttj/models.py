@@ -1,5 +1,5 @@
 from django.db import models
-
+from account.models import CustomUser
 # from locals
 from university.models import University
 # from student.models import Student
@@ -69,3 +69,24 @@ class RoomStuff(models.Model):
         return f"{self.room.name} | {self.stuff.name}"
     
 
+class Staff(CustomUser):
+    class Meta:
+        ordering = ['first_name', 'date_joined']
+    image = models.ImageField(upload_to="Staff/Images")
+    POSITION_CHOICES = (
+        (0, "Mudir"),
+        (1, "Qorovul"),
+        (2, "Hamshira"),
+        (3, "Tarbiyachi"),
+        (4, "Farrosh"),
+    )
+    position = models.IntegerField(choices=POSITION_CHOICES, default=2)
+    salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, help_text="Maoshni UZS da kiriting")
+
+    def __str__(self):
+        return f"{self.get_full_name()} | {self.display_position()}"
+    
+    def display_position(self):
+        return self.POSITION_CHOICES[self.position][1]
+
+    
