@@ -3,6 +3,7 @@ from django.db import models
 # from locals
 from account.models import CustomUser
 from university.models import Faculty, University
+from ttj.models import Ttj
 # Create your models here.
 
 class Student(CustomUser):
@@ -63,3 +64,16 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.student.get_full_name()} | {self.display_status_data()}"
+
+    
+class BlackList(models.Model):
+    class Meta:
+        ordering = ['created_at']
+    
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE) #waiting for TJJ model is been created
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def  __str__(self):
+        return self.student.get_full_name() + self.ttj.name
