@@ -97,3 +97,17 @@ class StudentTracking(models.Model):
 
     def display_status(self):
         return self.TRACKING_STATUS[self.status][1]
+
+
+class Payment(models.Model):
+    class Meta:
+        ordering = ['-created_at']
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=15, decimal_places=2, 
+                                default=0.00, help_text="To'lov miqdori UZS da bo'lishi kerak"
+                                )
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"PaymentID: {self.id} | {self.student.get_full_name()} | {self.amount}UZS"
