@@ -30,6 +30,7 @@ class Student(CustomUser):
     )
     status = models.IntegerField(STATUS_CHOICES, blank=True, null=True)
     approved = models.BooleanField(default=False) #TTJ ga qabul qilingan yoki qilnamaganlik statusi
+    balance = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, null=True)
     qr_code_data = models.CharField(max_length=150, blank=True, null=True)
     qr_code_file = models.ImageField(upload_to="Student/Qr_code")
 
