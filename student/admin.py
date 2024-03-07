@@ -23,5 +23,16 @@ class StudentAdmin(admin.ModelAdmin):
         'study_type', 'gender', 'status', 'smena',
     ]
     search_fields = ['first_name', 'last_name', 'phone', 'group']
-
 admin.site.register(Student, StudentAdmin)
+
+
+class BookingAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'student', 'status', 'booked_at', 'updated_at'
+    ]
+    list_editable = ['status']
+    list_filter = ['status']
+    search_fields = [
+        'student__first_name', 'student__last_name'
+    ]
+admin.site.register(Booking, BookingAdmin)
