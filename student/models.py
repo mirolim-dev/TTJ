@@ -55,7 +55,7 @@ class Booking(models.Model):
         (1, "Ko'rib chiqilmoqda"),
         (2, "TTJ ga qabul qilindi"),
     )
-    status = models.IntegerField()
+    status = models.IntegerField(choices=BOOKING_STATUS_CHOICES, default=1)
     description = models.TextField()
     booked_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
