@@ -36,3 +36,26 @@ class BookingAdmin(admin.ModelAdmin):
         'student__first_name', 'student__last_name'
     ]
 admin.site.register(Booking, BookingAdmin)
+
+
+class BlackListAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'student', 'ttj', 'created_at'
+    ]
+    search_fields = ['student__first_name', 'student__last_name']
+admin.site.register(BlackList, BlackListAdmin)
+
+
+class StudentTrackingAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'student', 'ttj', 'status', 'tracked_at'
+    ]
+    list_filter = ['status']
+    search_fields = ['student__first_name', 'student__last_name']
+admin.site.register(StudentTracking, StudentTrackingAdmin)
+
+
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'student', 'amount', 'created_at']
+    search_fields = ['id', 'student__first_name', 'student__last_name']
+admin.site.register(Payment, PaymentAdmin)
