@@ -39,7 +39,7 @@ class Student(CustomUser):
 
 
     class Meta:
-        verbose_name_plural = ['Students']
+        verbose_name_plural = 'Studentlar'
         ordering = ['date_joined']
 
     def get_all_payments(self):
