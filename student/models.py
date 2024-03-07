@@ -21,14 +21,14 @@ class Student(CustomUser):
         (1, "2-smena"),
         (2, "Kechgi smena")
     )
-    smena = models.IntegerField(choices=SMENA_CHOICES, default=0)
+    smena = models.IntegerField(choices=SMENA_CHOICES, blank=True)
     STATUS_CHOICES = (
         (0, "Qora Ro'yxatda"),
-        (1, '1-guruh nogironi'),
+        (1, "1-guruh nogironi"),
         (2, "Yoshlar dafarida turadi"),
-        (3, 'Chin yetim'),
+        (3, "Chin yetim")
     )
-    status = models.IntegerField(STATUS_CHOICES, blank=True, null=True)
+    status = models.IntegerField(choices=STATUS_CHOICES, blank=True, null=True)
     approved = models.BooleanField(default=False) #TTJ ga qabul qilingan yoki qilnamaganlik statusi
     balance = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, null=True)
     qr_code_data = models.CharField(max_length=150, blank=True, null=True)
