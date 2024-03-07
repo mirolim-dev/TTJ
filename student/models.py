@@ -77,3 +77,22 @@ class BlackList(models.Model):
 
     def  __str__(self):
         return self.student.get_full_name() + self.ttj.name
+
+
+class StudentTracking(models.Model):
+    class Meta:
+        ordering = ['-tracked_at']
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE)
+    TRACKING_STATUS = (
+        (0, "Chiqdi"),
+        (1, "Kirdi"),
+    )
+    status = models.IntegerField(choices=TRACKING_STATUS, default=1)
+    tracked_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.get_full_name} | {self.ttj.name} | {self.display_status()} | {self.tracked_at}"
+
+    def display_status(self):
+        return self.TRACKING_STATUS[self.status][1]
