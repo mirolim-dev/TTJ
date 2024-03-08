@@ -4,6 +4,9 @@ from django.db import models
 from account.models import CustomUser
 from university.models import Faculty, University
 from ttj.models import Ttj
+from .validators import (
+    validate_doing_payment, validate_payment_amount,
+)
 # Create your models here.
 
 class Student(CustomUser):
@@ -111,3 +114,8 @@ class Payment(models.Model):
     
     def __str__(self):
         return f"PaymentID: {self.id} | {self.student.get_full_name()} | {self.amount}UZS"
+
+    def clean(self) -> None:
+        validate_doing_payment(self.student)
+        validate_payment_amount(self.amount)
+        return super().clean()
