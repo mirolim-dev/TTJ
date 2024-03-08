@@ -12,6 +12,7 @@ class Admission(models.Model):
         (0, "Bekor qilingan"),
         (1, "Active")
     )
+    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
     description = models.TextField()
     contract = models.ImageField(upload_to="ttj/contract")
     created_at = models.DateTimeField(auto_now_add=True)
