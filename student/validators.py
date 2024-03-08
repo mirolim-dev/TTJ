@@ -15,4 +15,6 @@ def validate_student_for_black_list(student):
         raise ValidationError(f"Studentning TTJ da turish arizasi qondirilmagan.")
     elif student.admission__isNull:
         raise ValidationError(f"Student TTJ ga joylashib ulgurmadi")
-    # elif student.admission.status == 1:
+    elif student.admission.status == 0:
+        raise ValidationError(f"Ushbu talab ortiq TTJ da turmaydi shuning uchun uni Qora ro'yxatga qo'sha olmaysiz")
+    
