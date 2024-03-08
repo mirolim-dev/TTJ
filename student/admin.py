@@ -3,7 +3,8 @@ from django.contrib import admin
 
 # from local apps
 from .models import (
-    Student, Booking, BlackList, 
+    Student, Booking,
+    BookingReview, BlackList, 
     StudentTracking, Payment
     )
 # Register your models here.
@@ -36,6 +37,16 @@ class BookingAdmin(admin.ModelAdmin):
         'student__first_name', 'student__last_name'
     ]
 admin.site.register(Booking, BookingAdmin)
+
+
+class BookingReviewAdmin(admin.ModelAdmin):
+    list_display = ['id', 'booking', 'acceptance', 'last_review_time']
+    search_fields = [
+        'id',
+        'booking__student__first_name', 'booking__student__last_name',
+        ]
+    list_filter = ['acceptance']
+admin.site.register(BookingReview, BookingReviewAdmin)
 
 
 class BlackListAdmin(admin.ModelAdmin):

@@ -69,7 +69,24 @@ class Booking(models.Model):
     def __str__(self):
         return f"{self.student.get_full_name()} | {self.display_status_data()}"
 
+
+class BookingReview(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    ACCEPTANCE_CHOICES = (
+        (0, "Rad etildi"),
+        (1, "Qabul qilindi")
+    )
+    acceptance = models.IntegerField(choices=ACCEPTANCE_CHOICES, default=0)
+    description = models.TextField()
+    last_review_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.booking} {self.display_acceptance()}"
+
+    def display_acceptance(self):
+        return self.ACCEPTANCE_CHOICES[self.acceptance][1]
     
+
 class BlackList(models.Model):
     class Meta:
         ordering = ['created_at']
