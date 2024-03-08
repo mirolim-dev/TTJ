@@ -6,6 +6,8 @@ from .models import Bed, Ttj
 from student.models import Student
 
 class Admission(models.Model):
+    class Meta:
+        ordering = ['-created_at']
     student = models.ForeignKey(Student,on_delete=models.CASCADE)
     room = models.ForeignKey(Bed, on_delete=models.CASCADE)
     STATUS_CHOICES = (
@@ -27,6 +29,7 @@ class Admission(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    def display_status(self):
+        return self.STATUS_CHOICES[self.status][1]
 
-    class Meta:
-        ordering = ['-created_at']
+    
