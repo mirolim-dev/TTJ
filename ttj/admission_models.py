@@ -2,7 +2,9 @@ from django.db import models
 
 # from local
 from .models import Bed, Ttj
-
+from .validators import (
+    validate_admission_by_bed_status,
+)
 from student.models import Student
 
 class Admission(models.Model):
@@ -20,16 +22,12 @@ class Admission(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def get_all_ttj(self):
-        pass
-
-    def get_all_students_in_ttj(self):
-        pass
-
     def __str__(self) -> str:
         return self.name
     
+    def clean(self) -> None:
+        validate_admission_by_bed_status(self.status)
+        return super().clean()
+
     def display_status(self):
         return self.STATUS_CHOICES[self.status][1]
-
-    
