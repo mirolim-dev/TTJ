@@ -52,7 +52,7 @@ class Bed(Room):
 
 class Stuff(models.Model):
     name = models.CharField(max_length=50)
-    image = models.ImageField(upload_to="Ttj/staff")
+    image = models.ImageField(upload_to="Ttj/stuff")
     amount_of_existance = models.IntegerField(default=0)
     description = models.TextField(blank=True, null=True)
 
