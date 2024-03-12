@@ -17,7 +17,7 @@ class Ttj(models.Model):
     joined_at = models.DateTimeField(auto_now_add=True)
 
     def get_all_students_in_ttj(self):
-        pass
+        return self.admission_set.filter(status=1).aggregate(students_in_ttj=Count('id'))['students_in_ttj']
 
     def __str__(self) -> str:
         return self.name
