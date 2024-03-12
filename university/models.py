@@ -15,11 +15,11 @@ class University(models.Model):
         return self.name
     
     def get_all_ttj(self):
-        pass
+        return self.ttj_set.select_related('university')
 
 
     def get_all_students_placed_in_ttj(self):
-        pass
+        return self.ttj.get_all_student_int_ttj()
 
     
 

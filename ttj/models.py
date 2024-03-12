@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Count
+
 from account.models import CustomUser
 # from locals
 from university.models import University
@@ -14,7 +16,7 @@ class Ttj(models.Model):
     location_link = models.CharField(max_length=250)
     joined_at = models.DateTimeField(auto_now_add=True)
 
-    def get_all_student_in_ttj(self):
+    def get_all_students_in_ttj(self):
         pass
 
     def __str__(self) -> str:
@@ -44,7 +46,8 @@ class Bed(Room):
     status = models.IntegerField(STATUS_CHOICES, blank=True, null=True)
     
     def get_available_places(self):
-        pass
+        # return self.admission_set.filter(status=1).count()
+        return self.admission_set.filter(status=1).aggregate(available_places=Count('id'))['available_places'] #dabase hajmi kattalashib ketishligi mumkun bo'lgani uchun ushbu versiya afzal ko'riladi.
 
     def __str__(self) -> str:
         return f"{self.name} - {self.get_available_places()}"
@@ -89,4 +92,4 @@ class Staff(CustomUser):
     def display_position(self):
         return self.POSITION_CHOICES[self.position][1]
 
-    
+
