@@ -6,6 +6,8 @@ from university.models import Faculty, University
 from ttj.models import Ttj
 from .validators import (
     validate_doing_payment, validate_payment_amount,
+    validate_student_for_black_list, 
+    validate_student_tracking, 
 )
 # Create your models here.
 
@@ -96,6 +98,10 @@ class BlackList(models.Model):
     reason = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def clean(self) -> None:
+        validate_student_for_black_list(self.student)
+        return super().clean()
+
     def  __str__(self):
         return self.student.get_full_name() + self.ttj.name
 
@@ -111,6 +117,10 @@ class StudentTracking(models.Model):
     )
     status = models.IntegerField(choices=TRACKING_STATUS, default=1)
     tracked_at = models.DateTimeField(auto_now_add=True)
+
+    def clean(self) -> None:
+        validate_student_tracking(self.student)
+        return super().clean()
 
     def __str__(self):
         return f"{self.student.get_full_name} | {self.ttj.name} | {self.display_status()} | {self.tracked_at}"
