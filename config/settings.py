@@ -31,13 +31,15 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'jazzmin',
+    'django.contrib.admin',
     # my apps
     'student',
     'ttj',
@@ -127,3 +129,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Your Admin Title",
+    "site_logo": "your_logo.png",
+    "site_header": "Your Admin Header",
+    "welcome_sign": "Welcome to your Django Admin",
+    "show_sidebar": True,
+    "navigation_expanded": False,
+    "search_model": "auth.User",
+    "search_model_admin": "auth.UserAdmin",
+}
