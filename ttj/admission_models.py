@@ -4,6 +4,8 @@ from django.db import models
 from .models import Bed, Ttj
 from .validators import (
     validate_admission_by_bed_status,
+    validate_admission_by_stuent_approvement,
+    validate_admission_by_ttj_capacity,
 )
 from student.models import Student
 
@@ -27,6 +29,8 @@ class Admission(models.Model):
     
     def clean(self) -> None:
         validate_admission_by_bed_status(self.status)
+        validate_admission_by_stuent_approvement(self.student)
+        validate_admission_by_ttj_capacity(self.room.ttj)
         return super().clean()
 
     def display_status(self):
