@@ -53,6 +53,8 @@ class Bed(Room):
     def __str__(self) -> str:
         return f"{self.name} - {self.get_available_places()}"
     
+    def get_str_status(self)->str:
+        return self.STATUS_CHOICES[self.status][1]
 
 class Stuff(models.Model):
     name = models.CharField(max_length=50)

@@ -17,3 +17,9 @@ def validate_admission_by_ttj_capacity(ttj:object):
 def validate_admission_by_stuent_approvement(student:object):
     if not student.approved:
         raise ValidationError("Ushbu studentning TTJ uchun arizasi tasdiqlanmagan")
+
+
+def validate_changing_bed_status(bed:object):
+    if bed.status in (1, 2) and bed.admission_set.filter(status=1).exists():
+        raise ValidationError(f"Siz yotoqning statusini {bed.get_str_status()} ga o'zgartiraolmaysiz chunki ushbu xonada talabalr yashamoqda")
+        
