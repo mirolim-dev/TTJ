@@ -11,6 +11,7 @@ from university.models import University
 class Ttj(models.Model):
     university = models.ForeignKey(University,on_delete=models.CASCADE)
     name = models.CharField(max_length=250,unique=True)
+    capacity = models.PositiveBigIntegerField(default=0)
     image = models.ImageField(upload_to='Ttj/Images')
     location = models.CharField(max_length=250)
     location_link = models.CharField(max_length=250)
