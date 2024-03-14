@@ -14,7 +14,7 @@ def validate_admission_by_ttj_capacity(ttj:object):
         raise ValidationError(f"TTJ da joy qolmagan...")
 
 
-def validate_admission_by_stuent_approvement(student:object):
+def validate_admission_by_student_approvement(student:object):
     if not student.approved:
         raise ValidationError("Ushbu studentning TTJ uchun arizasi tasdiqlanmagan")
 
