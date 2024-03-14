@@ -32,6 +32,15 @@ class Admission(models.Model):
         validate_admission_by_stuent_approvement(self.student)
         validate_admission_by_ttj_capacity(self.room.ttj)
         return super().clean()
+    
+    def save(self):
+        if self.pk and self.status == 0 :
+            if self.room.get_available_places() == self.room.capacity:
+                self.room.status = 2
+            else:
+                self.room.status = 3
+            self.room.save()
+        return super().save()
 
     def display_status(self):
         return self.STATUS_CHOICES[self.status][1]

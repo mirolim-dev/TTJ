@@ -60,11 +60,6 @@ class Bed(Room):
         validate_changing_bed_status(self)
         return super().clean()
 
-    def save(self):
-        if not self.pk and self.get_available_places() == 0:
-            self.status = 0
-        return super().save()
-
     def get_str_status(self)->str:
         return self.STATUS_CHOICES[self.status][1]
 
