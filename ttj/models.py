@@ -48,7 +48,7 @@ class Bed(Room):
     
     def get_available_places(self):
         # return self.admission_set.filter(status=1).count()
-        return self.admission_set.filter(status=1).aggregate(available_places=Count('id'))['available_places'] #dabase hajmi kattalashib ketishligi mumkun bo'lgani uchun ushbu versiya afzal ko'riladi.
+        return self.capacity - self.admission_set.filter(status=1).aggregate(available_places=Count('id'))['available_places'] #dabase hajmi kattalashib ketishligi mumkun bo'lgani uchun ushbu versiya afzal ko'riladi.
 
     def __str__(self) -> str:
         return f"{self.name} - {self.get_available_places()}"
