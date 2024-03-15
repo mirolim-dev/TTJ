@@ -47,7 +47,7 @@ class Bed(Room):
         (2, "Bo'sh"),
         (3, "Bo'sh joylar bor"),
     )
-    status = models.IntegerField(STATUS_CHOICES, blank=True, null=True)
+    status = models.IntegerField(choices=STATUS_CHOICES, blank=True, null=True)
     
     def get_available_places(self):
         # return self.admission_set.filter(status=1).count()
