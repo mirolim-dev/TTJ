@@ -57,8 +57,12 @@ class Bed(Room):
         return f"{self.name} - {self.get_available_places()}"
     
     def clean(self) -> None:
-        validate_changing_bed_status(self)
         return super().clean()
+    
+    def save(self):
+        if self.pk:
+            validate_changing_bed_status(self)
+        return super().save()
 
     def get_str_status(self)->str:
         return self.STATUS_CHOICES[self.status][1]

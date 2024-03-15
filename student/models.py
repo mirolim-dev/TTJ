@@ -41,7 +41,7 @@ class Student(CustomUser):
     qr_code_file = models.ImageField(upload_to="Student/Qr_code")
 
     def __str__(self):
-        return f"{self.get_full_name} | {self.group}"
+        return f"{self.get_full_name()} | {self.group}"
 
 
     class Meta:
