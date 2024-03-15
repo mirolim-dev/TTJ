@@ -85,7 +85,7 @@ class RoomStuff(models.Model):
 class Staff(CustomUser):
     class Meta:
         ordering = ['first_name', 'date_joined']
-    image = models.ImageField(upload_to="Staff/Images")
+    image = models.ImageField(upload_to="Staff/Images", blank=True)
     POSITION_CHOICES = (
         (0, "Mudir"),
         (1, "Qorovul"),
