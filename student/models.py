@@ -9,6 +9,7 @@ from .validators import (
     validate_student_for_black_list, 
     validate_student_tracking, 
 )
+
 # Create your models here.
 
 class Student(CustomUser):

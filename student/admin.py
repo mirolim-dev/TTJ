@@ -2,6 +2,7 @@ from django.contrib import admin
 
 
 # from local apps
+from .forms import StudentForm
 from .models import (
     Student, Booking,
     BookingReview, BlackList, 
@@ -10,6 +11,7 @@ from .models import (
 # Register your models here.
 
 class StudentAdmin(admin.ModelAdmin):
+    form = StudentForm
     list_display = [
         'id', 'first_name', 'last_name', 'gender', 'phone', 
         'address', 'university', 'faculty', 
