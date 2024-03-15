@@ -1,5 +1,5 @@
 from django.db import models
-
+from account.models import CustomUser
 # Create your models here.
 class University(models.Model):
     name = models.CharField(max_length=250, unique=True)
@@ -32,4 +32,11 @@ class Faculty(models.Model):
     
     class Meta:
         ordering = ['name']
+
+
+class BookingReviewer(CustomUser):
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    is_working = models.BooleanField(default=True)
+
 
