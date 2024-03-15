@@ -95,6 +95,7 @@ class Staff(CustomUser):
     )
     position = models.IntegerField(choices=POSITION_CHOICES, default=2)
     salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, help_text="Maoshni UZS da kiriting")
+    is_working = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.get_full_name()} | {self.display_position()}"
