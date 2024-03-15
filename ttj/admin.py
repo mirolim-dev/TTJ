@@ -5,6 +5,7 @@ from .admission_models import Admission
 from .models import (
     Ttj, Room, Stuff, RoomStuff, Bed, Staff
 )
+from .forms import StaffForm
 # Register your models here.
 
 class AdmissionAdmin(admin.ModelAdmin):
@@ -49,6 +50,7 @@ admin.site.register(RoomStuff, RoomStuffAdmin)
 
 
 class StaffAdmin(admin.ModelAdmin):
+    form = StaffForm
     list_display = ['id', 'first_name', 'last_name', 'phone', 'address', 'position', 'salary', 'is_working']
     list_filter = ['position']
     search_fields = ['first_name', 'last_name', 'phone']
