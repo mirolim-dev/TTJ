@@ -49,7 +49,7 @@ admin.site.register(RoomStuff, RoomStuffAdmin)
 
 
 class StaffAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'phone', 'address', 'position', 'salary']
+    list_display = ['id', 'first_name', 'last_name', 'phone', 'address', 'position', 'salary', 'is_working']
     list_filter = ['position']
     search_fields = ['first_name', 'last_name', 'phone']
     list_display_links = ['first_name']
