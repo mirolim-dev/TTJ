@@ -6,7 +6,7 @@ def validate_admission_by_bed_status(status):
         # (2, "Bo'sh"),
         # (3, "Bo'sh joylar bor")
     if status not in (2, 3):
-        raise ValidationError(f"Tanlanayotgan xonaga qo'shib bo'lmaydi")
+        raise ValidationError(f"Tanlanayotgan xonaga qo'shib bo'lmaydi\nChunki uning statusi:{status} ")
 
 
 def validate_admission_by_ttj_capacity(ttj:object):
@@ -16,7 +16,7 @@ def validate_admission_by_ttj_capacity(ttj:object):
 
 def validate_admission_by_student_approvement(student:object):
     if not student.approved:
-        raise ValidationError("Ushbu studentning TTJ uchun arizasi tasdiqlanmagan")
+        raise ValidationError(f"Ushbu studentning TTJ uchun arizasi tasdiqlanmagan")
 
 
 def validate_changing_bed_status(bed:object):

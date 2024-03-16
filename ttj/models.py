@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Sum
 
 from account.models import CustomUser
 # from locals
@@ -21,7 +21,9 @@ class Ttj(models.Model):
     joined_at = models.DateTimeField(auto_now_add=True)
 
     def get_all_students_in_ttj(self):
-        return self.admission_set.filter(status=1).aggregate(students_in_ttj=Count('id'))['students_in_ttj']
+        beds = self.room_set.select_related('ttj')
+
+        return self.room.bed_set.filter(status__in=[2, 3]).aggregate(students_in_ttj=Sum('get_number_of_active_admissions'))['students_in_ttj']
 
     def __str__(self) -> str:
         return self.name
@@ -66,6 +68,10 @@ class Bed(Room):
 
     def get_str_status(self)->str:
         return self.STATUS_CHOICES[self.status][1]
+
+    def get_number_of_active_admissions(self):
+        return self.admission_set.filter(status=1).aggregate(active_admissions=Count('id'))['active_admissions']
+
 
 class Stuff(models.Model):
     name = models.CharField(max_length=50)

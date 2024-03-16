@@ -28,7 +28,7 @@ class Admission(models.Model):
         return self.name
     
     def clean(self) -> None:
-        validate_admission_by_bed_status(self.status)
+        validate_admission_by_bed_status(self.room.status)
         validate_admission_by_student_approvement(self.student)
         validate_admission_by_ttj_capacity(self.room.ttj)
         return super().clean()
