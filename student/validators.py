@@ -13,16 +13,16 @@ def validate_doing_payment(student):
 def validate_student_for_black_list(student):
     if not student.approved:
         raise ValidationError(f"Studentning TTJ da turish arizasi qondirilmagan.")
-    elif student.admission__isNull:
+    elif student.admission_set == None:
         raise ValidationError(f"Student TTJ ga joylashib ulgurmadi")
-    elif student.admission.status == 0:
+    elif student.admission_set.last().status == 0:
         raise ValidationError(f"Ushbu talaba ortiq TTJ da turmaydi shuning uchun uni Qora ro'yxatga qo'sha olmaysiz")
     
 
 def validate_student_tracking(student):
     if not student.approved:
         raise ValidationError(f"Studentning TTJ da turish arizasi qondirilmagan.")
-    elif student.admission__isNull:
+    elif student.admission_set == None:
         raise ValidationError(f"Student TTJ ga joylashib ulgurmadi")
-    elif student.admission.status == 0:
+    elif student.admission_set.last().status == 0:
         raise ValidationError(f"Ushbu talaba ortiq TTJ da turmaydi shuning uchun uni tracking qilib bo'lmaydi")

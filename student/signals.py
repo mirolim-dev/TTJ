@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from .models import (
-    BlackList, Student, Booking, BookingReview
+    BlackList, Student, Booking, BookingReview, StudentTracking
 )
 
 
@@ -23,7 +23,7 @@ def change_student_approved_field_by_booking(sender, instance, **kwargs):
     
 
 @receiver(post_save, sender=BookingReview)
-def update_booking_sattus_by_bookin_review(sender, instance, **kwargs):
+def update_booking_sattus_by_booking_review(sender, instance, **kwargs):
     booking = instance.booking
     if instance.acceptance == 1:
         booking.status = 2
@@ -31,3 +31,11 @@ def update_booking_sattus_by_bookin_review(sender, instance, **kwargs):
         booking.status = 0
     booking.save()
 
+
+@receiver(pre_save, sender=StudentTracking)
+def update_student_tracking_status(sender, instance, **kwargs):
+    last_tracking = StudentTracking.objects.filter(student=instance.student).first()
+    if last_tracking.status == 1:
+        instance.status = 0
+    else:
+        instance.status = 1

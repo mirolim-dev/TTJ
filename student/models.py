@@ -83,10 +83,11 @@ class StudentTracking(models.Model):
         validate_student_tracking(self.student)
         return super().clean()
 
-    def save(self):
-        if not self.pk and self.student_set.last().status==1:
-            self.status = 0
-        return super().save()
+    # def save(self, *args, **kwargs):
+    #     print(StudentTracking.objects.filter(student=self.student).last().status==1)
+    #     if StudentTracking.objects.filter(student=self.student).last().status==1:
+    #         self.status = 0
+    #     return super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.student.get_full_name} | {self.ttj.name} | {self.display_status()} | {self.tracked_at}"
