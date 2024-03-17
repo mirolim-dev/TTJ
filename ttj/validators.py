@@ -10,7 +10,7 @@ def validate_admission_by_bed_status(status):
 
 
 def validate_admission_by_ttj_capacity(ttj:object):
-    if ttj.capacity >= ttj.get_all_students_in_ttj():
+    if ttj.capacity <= ttj.get_all_students_in_ttj().count():
         raise ValidationError(f"TTJ da joy qolmagan...")
 
 

@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # from local apps
-from .admission_models import Admission
 from .models import (
-    Ttj, Room, Stuff, RoomStuff, Bed, Staff
+    Ttj, Room, Stuff, RoomStuff, Bed, Staff, 
+    Admission,
 )
 from .forms import StaffForm
 # Register your models here.

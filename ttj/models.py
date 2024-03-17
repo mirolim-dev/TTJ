@@ -1,12 +1,17 @@
 from django.db import models
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 
 from account.models import CustomUser
 # from locals
 from university.models import University
+from student.student_model import Student
 from .validators import (
     validate_changing_bed_status,
+    validate_admission_by_bed_status,
+    validate_admission_by_student_approvement,
+    validate_admission_by_ttj_capacity,
 )
+
 # from student.models import Student
 
 
@@ -23,7 +28,9 @@ class Ttj(models.Model):
     def get_all_students_in_ttj(self):
         beds = self.room_set.select_related('ttj')
 
-        return self.room.bed_set.filter(status__in=[2, 3]).aggregate(students_in_ttj=Sum('get_number_of_active_admissions'))['students_in_ttj']
+        return Admission.objects.filter(
+            Q(room__in=beds) & Q(status=1)
+        ).values('student')
 
     def __str__(self) -> str:
         return self.name
@@ -56,7 +63,7 @@ class Bed(Room):
         return self.capacity - self.admission_set.filter(status=1).aggregate(available_places=Count('id'))['available_places'] #dabase hajmi kattalashib ketishligi mumkun bo'lgani uchun ushbu versiya afzal ko'riladi.
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.get_available_places()}"
+        return f"{self.name} | {self.capacity} - {self.get_available_places()}"
     
     def clean(self) -> None:
         return super().clean()
@@ -114,3 +121,38 @@ class Staff(CustomUser):
         return self.POSITION_CHOICES[self.position][1]
 
 
+class Admission(models.Model):
+    class Meta:
+        ordering = ['-created_at']
+    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    room = models.ForeignKey(Bed, on_delete=models.CASCADE)
+    STATUS_CHOICES = (
+        (0, "Bekor qilingan"),
+        (1, "Active")
+    )
+    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
+    description = models.TextField()
+    contract = models.ImageField(upload_to="ttj/contract")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.student} | {self.room} | {self.display_status()}"
+    
+    def clean(self) -> None:
+        validate_admission_by_bed_status(self.room.status)
+        validate_admission_by_student_approvement(self.student)
+        validate_admission_by_ttj_capacity(self.room.ttj)
+        return super().clean()
+    
+    def save(self):
+        if self.pk and self.status == 0 :
+            if self.room.get_available_places() == self.room.capacity:
+                self.room.status = 2
+            else:
+                self.room.status = 3
+            self.room.save()
+        return super().save()
+
+    def display_status(self):
+        return self.STATUS_CHOICES[self.status][1]
