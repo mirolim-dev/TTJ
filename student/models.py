@@ -1,6 +1,7 @@
 from django.db import models
 
 # from locals
+from university.models import University
 from .student_model import Student
 from ttj.models import Ttj
 from .validators import (
@@ -15,6 +16,7 @@ from .validators import (
 class Booking(models.Model):
     class Meta:
         ordering = ['-booked_at']
+    university = models.ForeignKey(University, on_delete=models.CASCADE, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     BOOKING_STATUS_CHOICES = (
         (0, "TTJ ga joylashtirish so'rovi rad etildi"),

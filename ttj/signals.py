@@ -1,14 +1,20 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from .admission_models import Admission
-
+from student.models import Student
+from .models import Admission
+from .utils import generate_qr
 
 @receiver(post_save, sender=Admission)
 def update_bed_status_by_admission(sender, instance, **kwargs):
-    if not instance.pk:
-        instance.save()
-        room = instance.room
-        if room.get_available_places() == 0:
-            room.status = 0
-            room.save()
+    # if not instance.pk:
+    room = instance.room
+    if room.get_available_places() == 0:
+        room.status = 0
+        room.save()
+    student = instance.student
+    print(student)
+    qr_image = generate_qr(student)
+    print(qr_image)
+    student.qr_code_file = qr_image
+    student.save()
