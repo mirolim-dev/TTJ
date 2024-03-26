@@ -4,12 +4,10 @@ from PIL import ImageDraw, ImageFont
 from django.core.files.base import ContentFile
 
 def generate_qr(student: object):
-    # Get the text for the QR code
-    json_data = {
-        'student_id': student.id,
-        'university_id': student.university.id,
-        'ttj_id': student.admission_set.first().room.ttj,
-    }
+    # Get the text for the QR code 
+    student_id = student.id,
+    ttj_id = student.admission_set.first().room.ttj.id
+    custom_url = f"https://usmanovacademy.pythonanywhere.com/"
     image_name = f"{student.first_name} | {student.last_name}.png"
     custom_text = f"{student.first_name} | {student.last_name} | {student.admission_set.last().room.ttj.name}"
     # Generate QR code
@@ -19,7 +17,7 @@ def generate_qr(student: object):
         box_size=10,
         border=4,
     )
-    qr.add_data(json_data)
+    qr.add_data(custom_url)
     qr.make(fit=True)
 
     # Create an image from the QR code
