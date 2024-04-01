@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import CustomUser
+from .utils import generate_password
 # Create your models here.
 class University(models.Model):
     name = models.CharField(max_length=250, unique=True)
@@ -38,5 +39,11 @@ class BookingReviewer(CustomUser):
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     is_working = models.BooleanField(default=True)
+    visible_password = models.CharField(max_length=150, verbose_name="PassWord", null=True)
 
-
+    def save(self, *args, **kwargs):
+        password = generate_password(8)
+        self.set_password(password)
+        self.visible_password = password
+        self.is_staff = True
+        return super().save(*args, **kwargs)

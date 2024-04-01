@@ -13,8 +13,6 @@ def update_bed_status_by_admission(sender, instance, **kwargs):
         room.status = 0
         room.save()
     student = instance.student
-    print(student)
     qr_image = generate_qr(student)
-    print(qr_image)
     student.qr_code_file = qr_image
     student.save()
