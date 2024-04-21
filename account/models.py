@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, AbstractUser
 from django.db import models
 from django.core.validators import RegexValidator
 
@@ -35,7 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         regex=r'^\+?1?\d{9,15}$',
         message="Phone number must be entered in the format: '+9989999999'. Up to 15 digits allowed."
     )
-    phone = models.CharField(validators=[phone_regex], max_length=17)
+    phone = models.CharField(validators=[phone_regex], max_length=17, unique=True)
     email = models.EmailField(unique=True, blank=True, null=True)
     GENDER_CHOICES = (
         (0, "Female"),

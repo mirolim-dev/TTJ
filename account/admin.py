@@ -22,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('phone', 'username', 'email', 'first_name', 'last_name')
     ordering = ('phone',)
 
+# admin.site.unregister(User)
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
-admin.site.unregister(User)

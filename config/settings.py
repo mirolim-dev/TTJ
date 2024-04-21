@@ -137,6 +137,7 @@ MEDIA_ROOT = 'media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'account.CustomUser'
 
 JAZZMIN_SETTINGS = {
     "site_title": "Your Admin Title",

@@ -39,11 +39,16 @@ class BookingReviewer(CustomUser):
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     is_working = models.BooleanField(default=True)
-    visible_password = models.CharField(max_length=150, verbose_name="PassWord", null=True)
+    visible_password = models.CharField(max_length=150, verbose_name="PassWord", null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        password = generate_password(8)
-        self.set_password(password)
-        self.visible_password = password
+        if not self.visible_password:
+            print("Visible password not taken")
+            self.visible_password = generate_password(8)
+        try:
+            self.set_password(self.visible_password)
+            print("Password set successfully")
+        except:
+            pass
         self.is_staff = True
-        return super().save(*args, **kwargs)
+        return super().save(*args, **kwargs) 
