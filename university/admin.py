@@ -34,11 +34,10 @@ class FacultyAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        if obj is None:  # If the object is being added
-            if hasattr(request.user, 'bookingreviewer'):
-                default_university = request.user.bookingreviewer.university
-                form.base_fields['university'].disabled = True
-                form.base_fields['university'].initial = default_university
+        if hasattr(request.user, 'bookingreviewer'):
+            default_university = request.user.bookingreviewer.university
+            form.base_fields['university'].disabled = True
+            form.base_fields['university'].initial = default_university
         return form
 
     def save_model(self, request, obj, form, change):
@@ -63,11 +62,10 @@ class BookingReviewerAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        if obj is None:  # If the object is being added
-            if hasattr(request.user, 'bookingreviewer'):
-                default_university = request.user.bookingreviewer.university
-                form.base_fields['university'].disabled = True
-                form.base_fields['university'].initial = default_university
+        if hasattr(request.user, 'bookingreviewer'):
+            default_university = request.user.bookingreviewer.university
+            form.base_fields['university'].disabled = True
+            form.base_fields['university'].initial = default_university
         return form
 
     def save_model(self, request, obj, form, change):
