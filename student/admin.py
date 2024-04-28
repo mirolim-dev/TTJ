@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-
+from config.utils import user_group_is_exist
+from config.global_variables import UNIVERSITY_STAFF_GROUP
 # from local apps
 from .forms import StudentForm
 from .models import (
@@ -48,6 +49,19 @@ class BookingReviewAdmin(admin.ModelAdmin):
         'booking__student__first_name', 'booking__student__last_name',
         ]
     list_filter = ['acceptance']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        user = request.user
+        if user_group_is_exist(user, UNIVERSITY_STAFF_GROUP):
+            return qs.filter(booking__university = user.bookingreviewer.university)
+        return qs
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "booking" and request.user.is_authenticated and user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
+            kwargs["queryset"] = Booking.objects.filter(university=request.user.bookingreviewer.university)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        
 admin.site.register(BookingReview, BookingReviewAdmin)
 
 
