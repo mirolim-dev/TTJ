@@ -33,12 +33,25 @@ class TtjAdmin(admin.ModelAdmin):
     list_display_links = ['name']
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        print(qs)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(id=request.user.staff_set.first().ttj.id) 
         elif user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP) & qs.exists():
             return qs.filter(university=request.user.bookingreviewer.university)
         return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if hasattr(request.user, 'bookingreviewer') & user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
+            default_university = request.user.bookingreviewer.university
+            form.base_fields['university'].disabled = True
+            form.base_fields['university'].initial = default_university
+        return form
+
+    def save_model(self, request, obj, form, change):
+        if not change:  # Only set the university for new objects, not for existing ones
+            if hasattr(request.user, 'bookingreviewer'):
+                obj.university = request.user.bookingreviewer.university
+        super().save_model(request, obj, form, change)
 admin.site.register(Ttj, TtjAdmin)
 
 
