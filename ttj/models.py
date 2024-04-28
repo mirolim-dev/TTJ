@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Count, Sum, Q
 
 from account.models import CustomUser
+from config.utils import generate_password
 # from locals
 from university.models import University
 from student.student_model import Student
@@ -114,13 +115,23 @@ class Staff(CustomUser):
         (3, "Tarbiyachi"),
         (4, "Farrosh"),
     )
+    visible_password = models.CharField(max_length=150, verbose_name="PassWord", null=True, blank=True)
     position = models.IntegerField(choices=POSITION_CHOICES, default=2)
     salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, help_text="Maoshni UZS da kiriting")
     is_working = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.get_full_name()} | {self.display_position()}"
-    
+
+    def save(self, *args, **kwargs):
+        if not self.visible_password:
+            self.visible_password = generate_password(8)
+        try:
+            self.set_password(self.visible_password)
+        except:
+            pass
+        self.is_staff = True
+        return super().save(*args, **kwargs) 
     def display_position(self):
         return self.POSITION_CHOICES[self.position][1]
 

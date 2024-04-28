@@ -1,6 +1,6 @@
 from django.db import models
 from account.models import CustomUser
-from .utils import generate_password
+from config.utils import generate_password
 # Create your models here.
 class University(models.Model):
     name = models.CharField(max_length=250, unique=True)
@@ -43,11 +43,9 @@ class BookingReviewer(CustomUser):
 
     def save(self, *args, **kwargs):
         if not self.visible_password:
-            print("Visible password not taken")
             self.visible_password = generate_password(8)
         try:
             self.set_password(self.visible_password)
-            print("Password set successfully")
         except:
             pass
         self.is_staff = True
