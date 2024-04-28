@@ -2,6 +2,7 @@ import io
 import qrcode
 from PIL import ImageDraw, ImageFont
 from django.core.files.base import ContentFile
+# from django.contrib.auth.models import Group
 
 def generate_qr(student: object):
     # Get the text for the QR code 
@@ -35,3 +36,6 @@ def generate_qr(student: object):
 
     # Return the content file
     return ContentFile(image_bytes.getvalue(), name=image_name)
+
+
+

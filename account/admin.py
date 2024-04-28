@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group, User  
 from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
@@ -24,5 +24,5 @@ class CustomUserAdmin(UserAdmin):
 
 # admin.site.unregister(User)
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.unregister(Group)
-admin.site.register(Group, GroupAdmin)
+# admin.site.unregister(Group)
+# admin.site.register(Group, GroupAdmin)

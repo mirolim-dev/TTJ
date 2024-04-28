@@ -8,13 +8,15 @@ from account.permissions import booking_reviewer_permissions
 
 @receiver(post_save, sender=BookingReviewer)
 def add_reviewer_to_group(sender, instance, **kwargs):
-    group = Group.objects.get(name="Universitet xodimi")
-    print(f"Signal is working while creating booking reviewer")
-    if not group:
+    group_name = "Universitet xodimi" 
+    try:
+        group = Group.objects.get(name=group_name)
+        print(f"Signal is working while creating booking reviewer")
+    except:
         print("Group is not exist")
-        group = Group.objects.create(name="Universitet xodimi")
+        group = Group.objects.create(name=group_name)
         permissions = Permission.objects.filter(codename__in=booking_reviewer_permissions)
-        group.permissons.add(*permissions)
+        group.permissions.add(*permissions)
         group.save()
         print("Group has been created")
     

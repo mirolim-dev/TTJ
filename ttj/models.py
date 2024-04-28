@@ -83,6 +83,7 @@ class Bed(Room):
 
 
 class Stuff(models.Model):
+    ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=50)
     image = models.ImageField(upload_to="Ttj/stuff")
     amount_of_existance = models.IntegerField(default=0)
@@ -104,6 +105,7 @@ class RoomStuff(models.Model):
 class Staff(CustomUser):
     class Meta:
         ordering = ['first_name', 'date_joined']
+    ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE, null=True)
     image = models.ImageField(upload_to="Staff/Images", blank=True)
     POSITION_CHOICES = (
         (0, "Mudir"),
@@ -158,3 +160,7 @@ class Admission(models.Model):
 
     def display_status(self):
         return self.STATUS_CHOICES[self.status][1]
+
+    @property
+    def get_ttj(self):
+        return self.room.ttj
