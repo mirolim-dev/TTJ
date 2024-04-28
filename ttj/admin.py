@@ -107,9 +107,40 @@ class StaffAdmin(admin.ModelAdmin):
     list_filter = ['position']
     search_fields = ['first_name', 'last_name', 'phone']
     list_display_links = ['first_name']
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(ttj=request.user.staff.ttj) 
         return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if user_group_is_exist(request.user, MUDIR_GROUP):
+            default_ttj = request.user.staff.ttj
+            form.base_fields['ttj'].disabled = True
+            form.base_fields['ttj'].initial = default_ttj
+        return form
+        
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "staff" and request.user.is_authenticated:
+            if user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
+                kwargs["queryset"] = Ttj.objects.filter(university=request.user.bookingreviewer.university)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        if db_field.name == "position" and request.user.is_authenticated:
+            if user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
+                # Limit the choices for Booking Reviewers
+                kwargs["choices"] = [
+                    choice for choice in Staff.POSITION_CHOICES 
+                    if choice[0] in [0, 3]  # Only allow Mudir (0) and Tarbiyachi (3)
+                ]
+        return super().formfield_for_choice_field(db_field, request, **kwargs)
+        
+    def save_model(self, request, obj, form, change):
+        if not change:  # Only set the university for new objects, not for existing ones
+            if user_group_is_exist(request.user, MUDIR_GROUP):
+                obj.ttj = request.user.staff.ttj
+        super().save_model(request, obj, form, change)
 admin.site.register(Staff, StaffAdmin)
