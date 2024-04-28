@@ -113,7 +113,8 @@ class StaffAdmin(admin.ModelAdmin):
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(ttj=request.user.staff.ttj) 
         elif user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
-            return qs.filter(ttj__university=request.user.bookingreviwer.university, position__in=[0, 3])
+            print("Booking Reviewer here")
+            return qs.filter(ttj__university=request.user.bookingreviewer.university, position__in=[0, 3])
         return qs
 
     def get_form(self, request, obj=None, **kwargs):
@@ -125,9 +126,8 @@ class StaffAdmin(admin.ModelAdmin):
         return form
         
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "staff" and request.user.is_authenticated:
-            if user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
-                kwargs["queryset"] = Ttj.objects.filter(university=request.user.bookingreviewer.university)
+        if db_field.name == "ttj" and request.user.is_authenticated and user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
+            kwargs["queryset"] = Ttj.objects.filter(university=request.user.bookingreviewer.university)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
