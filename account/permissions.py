@@ -3,7 +3,8 @@ booking_reviewer_permissions = [
     'view_bookingreview', 'add_ttj', 'change_ttj', 'delete_ttj', 
     'view_ttj', 'add_bookingreviewer', 'change_bookingreviewer', 
     'delete_bookingreviewer', 'view_bookingreviewer', 'add_faculty', 
-    'change_faculty', 'delete_faculty', 'view_faculty', 'view_university'
+    'change_faculty', 'delete_faculty', 'view_faculty', 'view_university',
+    'add_staff', 'change_staff', 'delete_staff', 'view_staff',
     ]
 
 ttj_mudir_permissions = [
