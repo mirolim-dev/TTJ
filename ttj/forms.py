@@ -6,4 +6,4 @@ class StaffForm(forms.ModelForm):
     
     class Meta:
         model = Staff
-        fields = ("first_name", 'last_name', 'address', 'phone', 'gender', 'position', 'salary', 'image', 'is_working')
+        fields = ("first_name", 'last_name', 'address', 'phone', 'gender', 'ttj', 'position', 'salary', 'image', 'is_working')

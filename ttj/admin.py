@@ -103,13 +103,13 @@ admin.site.register(RoomStuff, RoomStuffAdmin)
 
 class StaffAdmin(admin.ModelAdmin):
     form = StaffForm
-    list_display = ['id', 'first_name', 'last_name', 'phone', 'address', 'position', 'salary', 'is_working']
+    list_display = ['id', 'first_name', 'last_name', 'phone', 'address', 'ttj', 'position', 'salary', 'is_working']
     list_filter = ['position']
     search_fields = ['first_name', 'last_name', 'phone']
     list_display_links = ['first_name']
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(ttj=request.user.staff_set.first().ttj) 
+            return qs.filter(ttj=request.user.staff.ttj) 
         return qs
 admin.site.register(Staff, StaffAdmin)
