@@ -112,6 +112,8 @@ class StaffAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(ttj=request.user.staff.ttj) 
+        elif user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
+            return qs.filter(ttj__university=request.user.bookingreviwer.university, position__in=[0, 3])
         return qs
 
     def get_form(self, request, obj=None, **kwargs):
@@ -137,7 +139,7 @@ class StaffAdmin(admin.ModelAdmin):
                     if choice[0] in [0, 3]  # Only allow Mudir (0) and Tarbiyachi (3)
                 ]
         return super().formfield_for_choice_field(db_field, request, **kwargs)
-        
+
     def save_model(self, request, obj, form, change):
         if not change:  # Only set the university for new objects, not for existing ones
             if user_group_is_exist(request.user, MUDIR_GROUP):
