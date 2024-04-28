@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 # from local apps
+from student.models import Student
 from .models import (
     Ttj, Room, Stuff, RoomStuff, Bed, Staff, 
     Admission,
@@ -19,11 +20,21 @@ class AdmissionAdmin(admin.ModelAdmin):
     list_filter = ['status']
     search_fields = ['student__first_name', 'student__last_name', 'room__name']
     list_display_links = ['student']
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(room__ttj=request.user.staff.ttj) 
         return qs
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        user = request.user
+        if request.user.is_authenticated and user_group_is_exist(user, MUDIR_GROUP):
+            if db_field.name == "student":
+                kwargs["queryset"] = Student.objects.filter(university=user.staff.ttj.university, approved=True)
+            if db_field.name == "room":
+                kwargs["queryset"] = Bed.objects.filter(ttj=user.staff.ttj, status__in=[2, 3])
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 admin.site.register(Admission, AdmissionAdmin)
 
 

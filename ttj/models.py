@@ -139,7 +139,7 @@ class Staff(CustomUser):
 class Admission(models.Model):
     class Meta:
         ordering = ['-created_at']
-    student = models.ForeignKey(Student,on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     room = models.ForeignKey(Bed, on_delete=models.CASCADE)
     STATUS_CHOICES = (
         (0, "Bekor qilingan"),
