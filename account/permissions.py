@@ -17,7 +17,8 @@ ttj_mudir_permissions = [
     'change_room', 'delete_room', 'view_room', 'add_roomstuff', 
     'change_roomstuff', 'delete_roomstuff', 'view_roomstuff', 
     'add_staff', 'change_staff', 'delete_staff', 'view_staff', 
-    'add_stuff', 'change_stuff', 'delete_stuff', 'view_stuff'
+    'add_stuff', 'change_stuff', 'delete_stuff', 'view_stuff',
+    'view_ttj',
     ]
 
 
