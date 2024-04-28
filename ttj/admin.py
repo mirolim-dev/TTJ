@@ -22,7 +22,7 @@ class AdmissionAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(room__ttj=request.user.staff_set.first().ttj) 
+            return qs.filter(room__ttj=request.user.staff.ttj) 
         return qs
 admin.site.register(Admission, AdmissionAdmin)
 
@@ -34,7 +34,7 @@ class TtjAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(id=request.user.staff_set.first().ttj.id) 
+            return qs.filter(id=request.user.staff.ttj.id) 
         elif user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP) & qs.exists():
             return qs.filter(university=request.user.bookingreviewer.university)
         return qs
@@ -61,7 +61,7 @@ class RoomAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(ttj=request.user.staff_set.first().ttj) 
+            return qs.filter(ttj=request.user.staff.ttj) 
         return qs
 admin.site.register(Room, RoomAdmin)
 
@@ -73,7 +73,7 @@ class BedAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(ttj=request.user.staff_set.first().ttj)
+            return qs.filter(ttj=request.user.staff.ttj)
         return qs
 admin.site.register(Bed, BedAdmin)
 
@@ -85,7 +85,7 @@ class StuffAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(ttj=request.user.staff_set.first().ttj) 
+            return qs.filter(ttj=request.user.staff.ttj) 
         return qs
 admin.site.register(Stuff, StuffAdmin)
 
@@ -96,7 +96,7 @@ class RoomStuffAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(room__ttj=request.user.staff_set.first().ttj)
+            return qs.filter(room__ttj=request.user.staff.ttj)
         return qs
 admin.site.register(RoomStuff, RoomStuffAdmin)
 
