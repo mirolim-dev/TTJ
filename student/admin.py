@@ -115,6 +115,26 @@ class PaymentAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
-            return qs.filter(student__admission__ttj=request.user.staff.ttj) 
+            return qs.filter(ttj=request.user.staff.ttj) 
         return qs
+        
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if user_group_is_exist(request.user, MUDIR_GROUP):
+            default_ttj = request.user.staff.ttj
+            form.base_fields['ttj'].disabled = True
+            form.base_fields['ttj'].initial = default_ttj
+        return form
+
+    def save_model(self, request, obj, form, change):
+        if not change and user_group_is_exist(request.user, MUDIR_GROUP):  # Only set the university for new objects, not for existing ones
+            obj.ttj = request.user.staff.ttj
+        super().save_model(request, obj, form, change)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        user = request.user
+        if request.user.is_authenticated and user_group_is_exist(user, MUDIR_GROUP):
+            if db_field.name == "student":
+                kwargs["queryset"] = Student.objects.filter(university=user.staff.ttj.university, approved=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 admin.site.register(Payment, PaymentAdmin)
