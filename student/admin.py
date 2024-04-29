@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from config.utils import user_group_is_exist
-from config.global_variables import UNIVERSITY_STAFF_GROUP
+from config.global_variables import UNIVERSITY_STAFF_GROUP, MUDIR_GROUP
 # from local apps
 from .forms import StudentForm
 from .models import (
@@ -70,6 +70,26 @@ class BlackListAdmin(admin.ModelAdmin):
         'id', 'student', 'ttj', 'created_at'
     ]
     search_fields = ['student__first_name', 'student__last_name']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if user_group_is_exist(request.user, MUDIR_GROUP):
+            default_ttj = request.user.staff.ttj
+            form.base_fields['ttj'].disabled = True
+            form.base_fields['ttj'].initial = default_ttj
+        return form
+
+    def save_model(self, request, obj, form, change):
+        if not change and user_group_is_exist(request.user, MUDIR_GROUP):  # Only set the university for new objects, not for existing ones
+            obj.ttj = request.user.staff.ttj
+        super().save_model(request, obj, form, change)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        user = request.user
+        if request.user.is_authenticated and user_group_is_exist(user, MUDIR_GROUP):
+            if db_field.name == "student":
+                kwargs["queryset"] = Student.objects.filter(university=user.staff.ttj.university, approved=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 admin.site.register(BlackList, BlackListAdmin)
 
 
