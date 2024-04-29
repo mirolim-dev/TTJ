@@ -100,7 +100,7 @@ class BedAdmin(admin.ModelAdmin):
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(ttj=request.user.staff.ttj)
         return qs
-        
+
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if user_group_is_exist(request.user, MUDIR_GROUP):
@@ -125,6 +125,19 @@ class StuffAdmin(admin.ModelAdmin):
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(ttj=request.user.staff.ttj) 
         return qs
+        
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if user_group_is_exist(request.user, MUDIR_GROUP):
+            default_ttj = request.user.staff.ttj
+            form.base_fields['ttj'].disabled = True
+            form.base_fields['ttj'].initial = default_ttj
+        return form
+
+    def save_model(self, request, obj, form, change):
+        if not change and user_group_is_exist(request.user, MUDIR_GROUP):  # Only set the university for new objects, not for existing ones
+            obj.ttj = request.user.staff.ttj
+        super().save_model(request, obj, form, change)
 admin.site.register(Stuff, StuffAdmin)
 
 
