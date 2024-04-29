@@ -76,7 +76,7 @@ class BlackListAdmin(admin.ModelAdmin):
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(ttj=request.user.staff.ttj) 
         return qs
-        
+
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if user_group_is_exist(request.user, MUDIR_GROUP):
@@ -111,4 +111,10 @@ admin.site.register(StudentTracking, StudentTrackingAdmin)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ['id', 'student', 'amount', 'created_at']
     search_fields = ['id', 'student__first_name', 'student__last_name']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
+            return qs.filter(student__admission__ttj=request.user.staff.ttj) 
+        return qs
 admin.site.register(Payment, PaymentAdmin)

@@ -101,6 +101,7 @@ class StudentTracking(models.Model):
 class Payment(models.Model):
     class Meta:
         ordering = ['-created_at']
+    ttj = models.ForeignKey(Ttj, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=15, decimal_places=2, 
                                 default=0.00, help_text="To'lov miqdori UZS da bo'lishi kerak"
