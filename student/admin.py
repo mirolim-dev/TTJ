@@ -71,6 +71,12 @@ class BlackListAdmin(admin.ModelAdmin):
     ]
     search_fields = ['student__first_name', 'student__last_name']
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
+            return qs.filter(ttj=request.user.staff.ttj) 
+        return qs
+        
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if user_group_is_exist(request.user, MUDIR_GROUP):
