@@ -125,7 +125,7 @@ class StuffAdmin(admin.ModelAdmin):
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(ttj=request.user.staff.ttj) 
         return qs
-        
+
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if user_group_is_exist(request.user, MUDIR_GROUP):
@@ -149,6 +149,15 @@ class RoomStuffAdmin(admin.ModelAdmin):
         if user_group_is_exist(request.user, MUDIR_GROUP) & qs.exists():
             return qs.filter(room__ttj=request.user.staff.ttj)
         return qs
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        user = request.user
+        if request.user.is_authenticated and user_group_is_exist(user, MUDIR_GROUP):
+            if db_field.name == "stuff":
+                kwargs["queryset"] = Stuff.objects.filter(ttj=user.staff.ttj)
+            if db_field.name == "room":
+                kwargs["queryset"] = Room.objects.filter(ttj=user.staff.ttj)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 admin.site.register(RoomStuff, RoomStuffAdmin)
 
 
