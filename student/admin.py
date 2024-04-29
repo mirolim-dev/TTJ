@@ -27,6 +27,13 @@ class StudentAdmin(admin.ModelAdmin):
         'study_type', 'gender', 'status', 'smena',
     ]
     search_fields = ['first_name', 'last_name', 'phone', 'group']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        user = request.user
+        if user_group_is_exist(user, MUDIR_GROUP):
+            return qs.filter(admission__room__ttj=user.staff.ttj)
+        return qs
 admin.site.register(Student, StudentAdmin)
 
 
