@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jazzmin',
     'django.contrib.admin',
+    #packages
+    'rest_framework',
+
     # my apps
     'student',
     'ttj',

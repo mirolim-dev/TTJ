@@ -14,13 +14,13 @@ class Student(CustomUser):
         (0, "Sirtqi"),
         (1, "Ananaviy")
     )
-    study_type = models.IntegerField(choices=STUDY_CHOICES, default=1)
+    study_type = models.IntegerField(choices=STUDY_CHOICES, default=1, null=True)
     SMENA_CHOICES = (
         (0, "1-smena"),
         (1, "2-smena"),
         (2, "Kechgi smena")
     )
-    smena = models.IntegerField(choices=SMENA_CHOICES, blank=True)
+    smena = models.IntegerField(choices=SMENA_CHOICES, default=0, null=True)
     STATUS_CHOICES = (
         (0, "Qora Ro'yxatda"),
         (1, "1-guruh nogironi"),
