@@ -24,6 +24,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', set_language, name='set_language'),
+
+    path('', include('account.urls')),
     path('student/', include('student.urls')),
 ]
 # Add static and media URL patterns
