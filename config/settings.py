@@ -92,14 +92,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres', 
+#         'PASSWORD': 'ytOXaJcUgChsaQVEkRZpEKxXvDxHOFzO',
+#         'HOST': 'monorail.proxy.rlwy.net',
+#         'PORT': '53378',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres', 
-        'PASSWORD': 'ytOXaJcUgChsaQVEkRZpEKxXvDxHOFzO',
-        'HOST': 'monorail.proxy.rlwy.net',
-        'PORT': '53378',
+        'NAME': 'verceldb',
+        'USER': 'default', 
+        'PASSWORD': 'tkyA60sBzqwZ',
+        'HOST': 'ep-silent-scene-a4g8iosm-pooler.us-east-1.aws.neon.tech',
+        'PORT': '5432',
     }
 }
 
@@ -142,9 +153,13 @@ LANGUAGES = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+import os
+
 STATIC_URL = 'static/'
-STATIC_ROOT = 'staticfiles/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+# STATIC_ROOT = 'staticfiles/'
+# STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = 'media/'
 # Default primary key field type
