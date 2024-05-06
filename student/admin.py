@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from django.db.models import Q
 from config.utils import user_group_is_exist
 from config.global_variables import UNIVERSITY_STAFF_GROUP, MUDIR_GROUP
 # from local apps
@@ -33,6 +33,9 @@ class StudentAdmin(admin.ModelAdmin):
         user = request.user
         if user_group_is_exist(user, MUDIR_GROUP):
             return qs.filter(admission__room__ttj=user.staff.ttj)
+
+        elif user_group_is_exist(user, UNIVERSITY_STAFF_GROUP):
+            return qs.filter(university=user.bookingreviewer.university)
         return qs
 admin.site.register(Student, StudentAdmin)
 
@@ -46,6 +49,14 @@ class BookingAdmin(admin.ModelAdmin):
     search_fields = [
         'student__first_name', 'student__last_name'
     ]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        user = request.user
+        if user_group_is_exist(user, UNIVERSITY_STAFF_GROUP):
+            return qs.filter(university = user.bookingreviewer.university)
+        return qs
+
 admin.site.register(Booking, BookingAdmin)
 
 
@@ -66,7 +77,10 @@ class BookingReviewAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "booking" and request.user.is_authenticated and user_group_is_exist(request.user, UNIVERSITY_STAFF_GROUP):
-            kwargs["queryset"] = Booking.objects.filter(university=request.user.bookingreviewer.university)
+            kwargs["queryset"] = Booking.objects.filter(
+                Q(university=request.user.bookingreviewer.university) &
+                Q(status=1)
+                )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
         
 admin.site.register(BookingReview, BookingReviewAdmin)
