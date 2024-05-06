@@ -23,8 +23,8 @@ class StudentBookingForm(forms.Form):
     )
     gender = forms.ChoiceField(choices=GENDER_CHOICES, initial=1, widget=forms.Select(attrs={'placeholder': 'Gender'}))
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'placeholder': 'Image'}))
-    university = forms.ModelChoiceField(queryset=University.objects.all(), widget=forms.Select(attrs={'placeholder': 'University'}))
-    faculty = forms.ModelChoiceField(queryset=Faculty.objects.all(), widget=forms.Select(attrs={'placeholder': 'Faculty'}))
+    university = forms.ModelChoiceField(queryset=University.objects.all(), widget=forms.Select(attrs={"hx-get": "get_faculties", "hx-target": "#id_faculty"}))
+    faculty = forms.ModelChoiceField(queryset=Faculty.objects.none(), widget=forms.Select(attrs={'placeholder': 'Faculty'}))
     group = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'placeholder': 'Group'}))
     STUDY_CHOICES = (
         (0, "Sirtqi"),
@@ -49,6 +49,11 @@ class StudentBookingForm(forms.Form):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
+        # self.fields['university'].widget.attrs['hx-trigger'] = 'change'
+        # self.fields['university'].widget.attrs['hx-get'] = "/get_faculties/?university={value}"  # Update this line
+        # self.fields['university'].widget.attrs['hx-target'] = '#id_university'
+        # self.fields['faculty'].widget.attrs['hx-target'] = '#faculty-options'
+        # self.fields['faculty'].widget.attrs['hx-swap'] = 'outerHTML'
 
     def clean(self):
         password = self.cleaned_data['password']

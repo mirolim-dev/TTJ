@@ -26,3 +26,5 @@ def validate_student_tracking(student):
         raise ValidationError(f"Student TTJ ga joylashib ulgurmadi")
     elif student.admission_set.last().status == 0:
         raise ValidationError(f"Ushbu talaba ortiq TTJ da turmaydi shuning uchun uni tracking qilib bo'lmaydi")
+
+
