@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 # from .templatetags.custom_filters import get_field
-from university.models import Faculty
+from university.models import Faculty, University
 from .forms import StudentBookingForm, LoginForm
 
 # Create your views here.
@@ -41,9 +41,7 @@ def registration(request):
 
 
 def get_faculties(request):
-    print("Hey")
     university_id = request.GET.get('university')
-    print(university_id)
     faculties = Faculty.objects.filter(university__id=university_id)
     context = {
         'faculties': faculties

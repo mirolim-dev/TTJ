@@ -49,11 +49,9 @@ class StudentBookingForm(forms.Form):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
-        # self.fields['university'].widget.attrs['hx-trigger'] = 'change'
-        # self.fields['university'].widget.attrs['hx-get'] = "/get_faculties/?university={value}"  # Update this line
-        # self.fields['university'].widget.attrs['hx-target'] = '#id_university'
-        # self.fields['faculty'].widget.attrs['hx-target'] = '#faculty-options'
-        # self.fields['faculty'].widget.attrs['hx-swap'] = 'outerHTML'
+        if "university" in self.data:
+            university_id = int(self.data.get('university'))
+            self.fields['faculty'].queryset = Faculty.objects.filter(university__id=university_id)
 
     def clean(self):
         password = self.cleaned_data['password']
