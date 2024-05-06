@@ -32,7 +32,7 @@ class Booking(models.Model):
         return self.BOOKING_STATUS_CHOICES[self.status][1]    
 
     def __str__(self):
-        return f"{self.student.get_full_name()} | {self.display_status_data()}"
+        return f"{self.student.get_full_name()}"
 
 
 class BookingReview(models.Model):
@@ -46,7 +46,7 @@ class BookingReview(models.Model):
     last_review_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.booking} {self.display_acceptance()}"
+        return f"{self.booking}"
 
     def display_acceptance(self):
         return self.ACCEPTANCE_CHOICES[self.acceptance][1]
