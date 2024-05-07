@@ -155,9 +155,9 @@ LANGUAGES = [
 
 import os
 
-STATIC_URL = 'static/'
 # STATIC_ROOT = 'staticfiles/'
 # STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_URL = 'static/'
 STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static')
 MEDIA_URL = 'media/'
