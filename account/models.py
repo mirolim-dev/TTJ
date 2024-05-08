@@ -28,22 +28,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         # abstract = True
 
     username = models.CharField(max_length=255, unique=True)
-    first_name = models.CharField(max_length=25, blank=True)
-    last_name = models.CharField(max_length=255, blank=True)
-    address = models.CharField(max_length=255, blank=True)
+    first_name = models.CharField(max_length=25, blank=True, verbose_name="Ism")
+    last_name = models.CharField(max_length=255, blank=True, verbose_name="Familya")
+    address = models.CharField(max_length=255, blank=True, verbose_name="Manzil")
     phone_regex = RegexValidator(
         regex=r'^\+?1?\d{9,15}$',
         message="Phone number must be entered in the format: '+9989999999'. Up to 15 digits allowed."
     )
-    phone = models.CharField(validators=[phone_regex], max_length=17, unique=True)
+    phone = models.CharField(validators=[phone_regex], max_length=17, unique=True, verbose_name="Telefon raqami")
     email = models.EmailField(unique=True, blank=True, null=True)
     GENDER_CHOICES = (
         (0, "Female"),
         (1, "Male")
     )
-    gender = models.IntegerField(choices=GENDER_CHOICES, default=1)
+    gender = models.IntegerField(choices=GENDER_CHOICES, default=1, verbose_name="Jinsi")
 
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="O'zgartirilgan vaqti")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

@@ -16,6 +16,8 @@ from .validators import (
 class Booking(models.Model):
     class Meta:
         ordering = ['-booked_at']
+        verbose_name = "Yotoqxonada turish so'rovi"
+        verbose_name_plural = "Yotoqxonada turish so'rovlari"
     university = models.ForeignKey(University, on_delete=models.CASCADE, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     BOOKING_STATUS_CHOICES = (
@@ -36,6 +38,9 @@ class Booking(models.Model):
 
 
 class BookingReview(models.Model):
+    class Meta:
+        verbose_name = "Ko'rib chiqilgan so'rov"
+        verbose_name_plural = "Ko'rib chiqilgan so'rovlar"
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     ACCEPTANCE_CHOICES = (
         (0, "Rad etildi"),
@@ -55,6 +60,7 @@ class BookingReview(models.Model):
 class BlackList(models.Model):
     class Meta:
         ordering = ['created_at']
+        verbose_name_plural = "Qora ro'yxat"
     
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE) #waiting for TJJ model is been created
@@ -72,6 +78,7 @@ class BlackList(models.Model):
 class StudentTracking(models.Model):
     class Meta:
         ordering = ['-tracked_at']
+        verbose_name_plural = "Student Kirdi Chiqdisi"
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE)
     TRACKING_STATUS = (
@@ -101,6 +108,7 @@ class StudentTracking(models.Model):
 class Payment(models.Model):
     class Meta:
         ordering = ['-created_at']
+        verbose_name_plural = "To'lovlar"
     ttj = models.ForeignKey(Ttj, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=15, decimal_places=2, 

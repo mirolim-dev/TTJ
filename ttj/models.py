@@ -20,13 +20,13 @@ from .validators import (
 
 
 class Ttj(models.Model):
-    university = models.ForeignKey(University,on_delete=models.CASCADE)
-    name = models.CharField(max_length=250,unique=True)
-    capacity = models.PositiveBigIntegerField(default=0)
+    university = models.ForeignKey(University,on_delete=models.CASCADE, verbose_name="universitet")
+    name = models.CharField(max_length=250,unique=True, verbose_name="Nomi")
+    capacity = models.PositiveBigIntegerField(default=0, verbose_name="Sig'imi")
     image = models.ImageField(upload_to='Ttj/Images')
-    location = models.CharField(max_length=250)
-    location_link = models.CharField(max_length=250)
-    joined_at = models.DateTimeField(auto_now_add=True)
+    location = models.CharField(max_length=250, verbose_name="Manzili")
+    location_link = models.CharField(max_length=250, verbose_name="Manzil uchun link")
+    joined_at = models.DateTimeField(auto_now_add=True, verbose_name="Dasturga qo'shilgan vaqti")
 
     def get_all_students_in_ttj(self):
         beds = self.room_set.select_related('ttj')
@@ -41,25 +41,34 @@ class Ttj(models.Model):
     
     class Meta:
         ordering = ['-joined_at']
+        verbose_name_plural = "TTJ lar"
 
 
 class Room(models.Model):
+    class Meta:
+        verbose_name = "Xona"
+        verbose_name_plural = "Xonalar"
+
     ttj = models.ForeignKey(Ttj,on_delete=models.CASCADE)
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=250, verbose_name="Nomi")
 
     def __str__(self) -> str:
         return self.name
     
 
 class Bed(Room):
-    capacity = models.IntegerField(default=4)
+    class Meta:
+        verbose_name = "Yotoq"
+        verbose_name_plural = "Yotoqlar"
+
+    capacity = models.IntegerField(default=4, verbose_name="Sig'imi")
     STATUS_CHOICES = (
         (0, "Joy qolmagan"),
         (1, "Foydalanishga berilmagan"),
         (2, "Bo'sh"),
         (3, "Bo'sh joylar bor"),
     )
-    status = models.IntegerField(choices=STATUS_CHOICES, blank=True, null=True, default=2)
+    status = models.IntegerField(choices=STATUS_CHOICES, blank=True, null=True, default=2, verbose_name="Xolati")
     
     def get_available_places(self):
         # return self.admission_set.filter(status=1).count()
@@ -84,20 +93,25 @@ class Bed(Room):
 
 
 class Stuff(models.Model):
+    class Meta:
+        verbose_name = "Jihoz"
+        verbose_name_plural = "Jihozlar"
     ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name="Nomi")
     image = models.ImageField(upload_to="Ttj/stuff")
-    amount_of_existance = models.IntegerField(default=0)
-    description = models.TextField(blank=True, null=True)
+    amount_of_existance = models.IntegerField(default=0, verbose_name="Mavjud miqdori")
+    description = models.TextField(blank=True, null=True, verbose_name="Izoh")
 
     def __str__(self) -> str:
         return self.name
 
 
 class RoomStuff(models.Model):
-    stuff = models.ForeignKey(Stuff,on_delete=models.CASCADE)
-    room = models.ForeignKey(Room,on_delete=models.CASCADE)
-    amount = models.IntegerField()
+    class Meta:
+        verbose_name_plural = "Xona Jihozlari"
+    stuff = models.ForeignKey(Stuff,on_delete=models.CASCADE, verbose_name="Jihoz")
+    room = models.ForeignKey(Room,on_delete=models.CASCADE, verbose_name="Xona")
+    amount = models.IntegerField(verbose_name="Miqdor")
 
     def __str__(self) -> str:
         return f"{self.room.name} | {self.stuff.name}"
@@ -106,6 +120,7 @@ class RoomStuff(models.Model):
 class Staff(CustomUser):
     class Meta:
         ordering = ['first_name', 'date_joined']
+        verbose_name_plural = "Xodimlar"
     ttj = models.ForeignKey(Ttj, on_delete=models.CASCADE, null=True)
     image = models.ImageField(upload_to="Staff/Images", blank=True)
     POSITION_CHOICES = (
@@ -116,9 +131,9 @@ class Staff(CustomUser):
         (4, "Farrosh"),
     )
     visible_password = models.CharField(max_length=150, verbose_name="PassWord", null=True, blank=True)
-    position = models.IntegerField(choices=POSITION_CHOICES, default=2)
-    salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, help_text="Maoshni UZS da kiriting")
-    is_working = models.BooleanField(default=True)
+    position = models.IntegerField(choices=POSITION_CHOICES, default=2, verbose_name="Pozitisyasi")
+    salary = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, verbose_name="Maosh", help_text="Maoshni UZS da kiriting")
+    is_working = models.BooleanField(default=True, verbose_name="Ishlayabdi")
 
     def __str__(self):
         return f"{self.get_full_name()} | {self.display_position()}"
@@ -139,17 +154,18 @@ class Staff(CustomUser):
 class Admission(models.Model):
     class Meta:
         ordering = ['-created_at']
+        verbose_name_plural = "Tayinlovlar"
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    room = models.ForeignKey(Bed, on_delete=models.CASCADE)
+    room = models.ForeignKey(Bed, on_delete=models.CASCADE, verbose_name="Xona")
     STATUS_CHOICES = (
         (0, "Bekor qilingan"),
         (1, "Active")
     )
-    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
-    description = models.TextField()
-    contract = models.ImageField(upload_to="ttj/contract")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=1, verbose_name="Xolati")
+    description = models.TextField(verbose_name="Izoh")
+    contract = models.ImageField(upload_to="ttj/contract", verbose_name="Shartnoma")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Yaratilgan vaqti")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="O'zgartirilgan vaqti")
 
     def __str__(self) -> str:
         return f"{self.student} | {self.room} | {self.display_status()}"
