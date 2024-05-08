@@ -9,7 +9,7 @@ from university.models import Faculty, University
 from .forms import StudentBookingForm, LoginForm
 
 # Create your views here.
-@login_required(login_url='sign_in')
+# @login_required(login_url='sign_in')
 def home(request):
 
     context = {}
@@ -66,3 +66,23 @@ def sign_in(request):
     }
 
     return render(request, 'register-login/login.html', context)
+
+
+def demo_redirection(request, action:str):
+    phone, password = None, None
+    if action == "role-reviewer":
+        phone = "+998997654321"
+        password = "e1g5-}1F"
+    elif action == "role-mudir":
+        phone = "+998978457654"
+        password = "mr011012"
+    
+    User = get_user_model()
+    _user = User.objects.get(phone=phone)
+    _user = authenticate(username=_user.username, password=password)
+    # print("USer", _user)
+    if _user is not None:
+        login(request, _user)
+        return redirect('/admin/')
+    context = {}
+    return render(request, 'home.html', context)
